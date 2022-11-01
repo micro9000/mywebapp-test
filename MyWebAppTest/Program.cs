@@ -6,6 +6,7 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddApplicationInsightsTelemetry();
 
 var initialScopes = builder.Configuration.GetValue<string>("DownstreamApi:Scopes")?.Split(' ');
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
@@ -24,8 +25,6 @@ builder.Services.AddControllersWithViews(options =>
 });
 
 builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
-
-builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 

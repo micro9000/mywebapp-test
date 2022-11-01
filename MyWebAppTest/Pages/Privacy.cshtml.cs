@@ -16,6 +16,7 @@ namespace MyWebAppTest.Pages
 
         public void OnGet()
         {
+            _logger.LogInformation("Log from Privacy page");
         }
     }
 }

@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "appInsights1": {
+      "type": "appInsights"
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "AzureWebJobsStorage"
+    },
+    "secrets1": {
+      "type": "secrets"
+    },
+    "cosmosdb1": {
+      "type": "cosmosdb",
+      "connectionId": "AccountEndpoint=https://az204cosmosdb202201.documents.azure.com:443/;AccountKey=VO0EufSkPbmNuXRjNdtc7eUPWQullVS2P7FkLZtypZQLMmHWW17NgA7OiXLU8ioKDZWmUsD0mdeoCmR2e3Ts3A==;",
+      "dynamicId": null
+    }
+  }
+}

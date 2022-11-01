@@ -25,6 +25,8 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
 
+builder.Services.AddApplicationInsightsTelemetry();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

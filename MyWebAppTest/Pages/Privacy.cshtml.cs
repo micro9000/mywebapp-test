@@ -33,8 +33,7 @@ namespace MyWebAppTest.Pages
                 Category = category,
                 Price = 123,
                 PartitionKey = category,
-                RowKey = id,
-                ETag = Azure.ETag.All
+                RowKey = id
             };
 
             await _tableStorageService.UpsertEntityAsync(groceryItem);

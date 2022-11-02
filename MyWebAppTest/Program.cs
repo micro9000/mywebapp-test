@@ -29,6 +29,7 @@ builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
 builder.Services.AddSingleton<ICosmosDbService>
     (CosmosDbRegistration.InitializeCosmosClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
 
+builder.Services.AddScoped<ITableStorageService, TableStorageService>();
 
 var app = builder.Build();
 

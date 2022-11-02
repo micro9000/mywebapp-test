@@ -20,6 +20,19 @@
           "lib/net5.0/Azure.Core.dll": {}
         }
       },
+      "Azure.Data.Tables/12.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Azure.Core": "1.25.0",
+          "System.Text.Json": "4.7.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/Azure.Data.Tables.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Azure.Data.Tables.dll": {}
+        }
+      },
       "Azure.Identity/1.3.0": {
         "type": "package",
         "dependencies": {
@@ -2687,6 +2700,22 @@
         "lib/netcoreapp2.1/Azure.Core.xml",
         "lib/netstandard2.0/Azure.Core.dll",
         "lib/netstandard2.0/Azure.Core.xml"
+      ]
+    },
+    "Azure.Data.Tables/12.6.1": {
+      "sha512": "EnbcshkRrDHlBGz6LcFlfDVOtd8P+atSREfStLzjnzzIZXY+N6xPldtPQPVda2s93ENdoE9oW0azTyju2ek3Ag==",
+      "type": "package",
+      "path": "azure.data.tables/12.6.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "CHANGELOG.md",
+        "README.md",
+        "azure.data.tables.12.6.1.nupkg.sha512",
+        "azure.data.tables.nuspec",
+        "azureicon.png",
+        "lib/netstandard2.0/Azure.Data.Tables.dll",
+        "lib/netstandard2.0/Azure.Data.Tables.xml"
       ]
     },
     "Azure.Identity/1.3.0": {
@@ -8527,6 +8556,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "Azure.Data.Tables >= 12.6.1",
       "Microsoft.ApplicationInsights.AspNetCore >= 2.21.0",
       "Microsoft.Azure.Cosmos >= 3.31.1",
       "Microsoft.Graph >= 4.45.0",
@@ -8579,6 +8609,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "Azure.Data.Tables": {
+            "target": "Package",
+            "version": "[12.6.1, )"
+          },
           "Microsoft.ApplicationInsights.AspNetCore": {
             "target": "Package",
             "version": "[2.21.0, )"

@@ -9,6 +9,11 @@ using MyWebAppTest.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationInsightsTelemetry();
 
+builder.Services.AddSingleton<ICosmosDbService>
+    (CosmosDbRegistration.InitializeCosmosClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+
+builder.Services.AddScoped<ITableStorageService, TableStorageService>();
+
 var initialScopes = builder.Configuration.GetValue<string>("DownstreamApi:Scopes")?.Split(' ');
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
@@ -25,11 +30,6 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new AuthorizeFilter(policy));
 });
 builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
-
-builder.Services.AddSingleton<ICosmosDbService>
-    (CosmosDbRegistration.InitializeCosmosClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
-
-builder.Services.AddScoped<ITableStorageService, TableStorageService>();
 
 var app = builder.Build();
 

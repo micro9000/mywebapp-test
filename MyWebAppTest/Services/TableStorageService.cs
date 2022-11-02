@@ -5,7 +5,7 @@ namespace MyWebAppTest.Services;
 
 public class TableStorageService : ITableStorageService
 {
-    private const string TableName = "Item";
+    private const string TableName = "GroceryItems";
     private readonly IConfiguration _configuration;
     public TableStorageService(IConfiguration configuration)
     {

@@ -10,6 +10,7 @@ on:
   workflow_dispatch:
   
 env:
+  DOTNET_ROOT: '.'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.0.x' # set this to the dotnet version to use
   
@@ -37,7 +38,7 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/
 
-      - name: 'Resolve Project Dependencies Using Dotnet'
+      - name: 'Release Function'
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
@@ -56,6 +57,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: .net-app
+          path: ${{env.DOTNET_ROOT}}/
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Graph.ExternalConnectors;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using MyWebAppTest.Models;
 using MyWebAppTest.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +22,7 @@ builder.Services.AddSingleton<ICosmosDbService>
     (CosmosDbRegistration.InitializeCosmosClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
 
 builder.Services.AddScoped<ITableStorageService, TableStorageService>();
-
+builder.Services.AddScoped(typeof(IQueueStorageService<>), typeof(QueueStorageService<>));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>

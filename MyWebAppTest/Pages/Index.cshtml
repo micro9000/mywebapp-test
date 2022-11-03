@@ -12,3 +12,9 @@
 @foreach(var item in Model.Items){
     <h1>@item.Name - @item.Description</h1>
 }
+
+<form method="post">
+    <input type="text" name="name"> 
+    <input type="text" name="description"> 
+    <input type="submit">
+</form>

@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy dotnet core app to Azure Function App - az204functionapp202201
+name: Build and deploy Azure Function
 
 on:
   push:
@@ -39,4 +39,4 @@ jobs:
           app-name: 'az204functionapp202201'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4B1C47296EB947239B288B82C2ADCE16 }}
+          publish-profile: ${{ secrets.AZ_APPSERVICE_PUBLISH_PROFILE }}

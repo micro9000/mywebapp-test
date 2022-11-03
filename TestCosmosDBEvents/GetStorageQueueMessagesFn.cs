@@ -19,7 +19,7 @@ namespace TestCosmosDBEvents
 
         [Function(nameof(GetStorageQueueMessagesFn))]
         [QueueOutput("output-queue")]
-        public static string[] Run([QueueTrigger("input-queue", Connection = "StorageConnectionString")] Book myQueueItem, FunctionContext context)
+        public static string[] Run([QueueTrigger("input-queue")] Book myQueueItem, FunctionContext context)
         {
             // Use a string array to return more than one message.
             string[] messages = {

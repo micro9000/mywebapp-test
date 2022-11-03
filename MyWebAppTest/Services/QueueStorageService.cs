@@ -18,7 +18,10 @@ namespace MyWebAppTest.Services
         private QueueClient GetQueueClient(string queueName)
         {
             // Instantiate a QueueClient which will be used to create and manipulate the queue
-            var queueClientObj = new QueueClient(_storageConnectionString, queueName);
+            var queueClientObj = new QueueClient(_storageConnectionString, queueName, new QueueClientOptions
+            {
+                MessageEncoding = QueueMessageEncoding.Base64
+            });
             // Create the queue
             queueClientObj.CreateIfNotExists();
             return queueClientObj;

@@ -9,6 +9,10 @@ on:
       - main
   workflow_dispatch:
   
+env:
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '6.0.x' # set this to the dotnet version to use
+  
 jobs:
   build:
     runs-on: windows-latest
@@ -16,22 +20,29 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up .NET Core
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Build with dotnet
+      - name: Build webapp
         run: dotnet build --configuration Release .\MyWebAppTest.sln
 
-      - name: dotnet publish
+      - name: public webapp
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp ./MyWebAppTest/MyWebAppTest.csproj
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}/
+
+      - name: 'Resolve Project Dependencies Using Dotnet'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet build --configuration Release --output ./func ./TestCosmosDBEvents/TestCosmosDBEvents.csproj
+          popd
 
   deploy:
     runs-on: windows-latest
@@ -52,5 +63,14 @@ jobs:
         with:
           app-name: 'az204aspnetapp202201'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8D073F64F70C402CBF1279F70060BDD8 }}
+          publish-profile: ${{ secrets.AZ_APPSERVICE_PUBLISH_PROFILE }}
           package: .
+          
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: 'az204functionapp202201'
+          slot-name: 'Production'
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/func'
+          publish-profile: ${{ secrets.AZ_FUNC_PUBLISH_PROFILE }}

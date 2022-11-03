@@ -5,17 +5,19 @@ namespace MyWebAppTest.Services;
 
 public class TableStorageService : ITableStorageService
 {
-    private const string TableName = "GroceryItems";
-    private readonly IConfiguration _configuration;
+    private readonly string _storageConnectionString;
+    private readonly string _tableName;
+
     public TableStorageService(IConfiguration configuration)
     {
-        _configuration = configuration;
+        _storageConnectionString = configuration["StorageConnectionString"];
+        _tableName = configuration["storageTableName"];
     }
 
     private async Task<TableClient> GetTableClient()
     {
-        var serviceClient = new TableServiceClient(_configuration["StorageConnectionString"]);
-        var tableClient = serviceClient.GetTableClient(TableName);
+        var serviceClient = new TableServiceClient(_storageConnectionString);
+        var tableClient = serviceClient.GetTableClient(_tableName);
         await tableClient.CreateIfNotExistsAsync();
         return tableClient;
     }

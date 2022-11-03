@@ -57,6 +57,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'az204aspnetapp202201'
-          slot-name: 'az204functionapp202201'
+          slot-name: 'production'
           publish-profile: ${{ secrets.AZ_APPSERVICE_PUBLISH_PROFILE }}
           

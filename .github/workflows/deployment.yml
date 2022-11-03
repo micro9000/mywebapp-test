@@ -11,7 +11,6 @@ on:
   
 env:
   DOTNET_ROOT: '.'
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.0.x' # set this to the dotnet version to use
   
 jobs:
@@ -27,23 +26,19 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Build webapp
-        run: dotnet build --configuration Release .\MyWebAppTest.sln
+        run: | 
+          dotnet restore
+          dotnet build --configuration Release .\MyWebAppTest.sln
 
       - name: public webapp
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp ./MyWebAppTest/MyWebAppTest.csproj
 
-      - name: Upload artifact for deployment job
+      - name: Upload web artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/
+          name: .net-web-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
-      - name: 'Release Function'
-        shell: pwsh
-        run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          dotnet build --configuration Release --output ./func ./TestCosmosDBEvents/TestCosmosDBEvents.csproj
-          popd
   deploy:
     runs-on: windows-latest
     needs: build
@@ -52,11 +47,10 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
+      - name: Download web artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/
+          name: .net-web-app
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -65,13 +59,4 @@ jobs:
           app-name: 'az204aspnetapp202201'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZ_APPSERVICE_PUBLISH_PROFILE }}
-          package: .
           
-      - name: 'Run Azure Functions Action'
-        uses: Azure/functions-action@v1
-        id: fa
-        with:
-          app-name: 'az204functionapp202201'
-          slot-name: 'Production'
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/func'
-          publish-profile: ${{ secrets.AZ_FUNC_PUBLISH_PROFILE }}

@@ -34,7 +34,7 @@ namespace MyWebAppTest.Pages
             //asdf
         }
 
-        public void OnPost()
+        public void OnPostSubmitQueueMessage()
         {
             var name = Request.Form["name"];
             var description = Request.Form["description"];
@@ -53,7 +53,7 @@ namespace MyWebAppTest.Pages
 
         [BindProperty]
         public IFormFile Upload { get; set; }
-        public async Task<IActionResult> OnPostAsyncUploadFile()
+        public async Task<IActionResult> OnPostUploadFile()
         {
             if (!ModelState.IsValid)
             {

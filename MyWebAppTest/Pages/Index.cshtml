@@ -18,3 +18,11 @@
     <input type="text" name="description"> 
     <input type="submit">
 </form>
+
+<br/>
+<br/>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" asp-for="Upload" />
+    <input type="submit" asp-page-handler="UploadFile"/>
+</form>

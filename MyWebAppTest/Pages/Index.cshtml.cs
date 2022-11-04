@@ -12,14 +12,19 @@ namespace MyWebAppTest.Pages
         private readonly ILogger<IndexModel> _logger;
         private readonly ICosmosDbService cosmosDbService;
         private readonly IQueueStorageService<Item> queueStorageService;
+        private readonly IBlobStorageService blobStorageService;
 
         public IEnumerable<Item> Items { get; set; } = new List<Item>();
 
-        public IndexModel(ILogger<IndexModel> logger, ICosmosDbService cosmosDbService, IQueueStorageService<Item> queueStorageService)
+        public IndexModel(ILogger<IndexModel> logger, 
+                            ICosmosDbService cosmosDbService, 
+                            IQueueStorageService<Item> queueStorageService,
+                            IBlobStorageService blobStorageService)
         {
             _logger = logger;
             this.cosmosDbService = cosmosDbService;
             this.queueStorageService = queueStorageService;
+            this.blobStorageService = blobStorageService;
         }
 
         public async Task OnGet()
@@ -44,6 +49,20 @@ namespace MyWebAppTest.Pages
 
             queueStorageService.InsertMessage("input-queue", newItem);
             // do something with emailAddress
+        }
+
+        [BindProperty]
+        public IFormFile Upload { get; set; }
+        public async Task<IActionResult> OnPostAsyncUploadFile()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            await blobStorageService.UploadBlob(Upload.OpenReadStream(), Upload.FileName);
+
+            return Page();
         }
     }
 }

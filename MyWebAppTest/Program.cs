@@ -23,6 +23,7 @@ builder.Services.AddSingleton<ICosmosDbService>
 
 builder.Services.AddScoped<ITableStorageService, TableStorageService>();
 builder.Services.AddScoped(typeof(IQueueStorageService<>), typeof(QueueStorageService<>));
+builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>

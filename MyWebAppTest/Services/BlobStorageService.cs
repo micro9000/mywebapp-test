@@ -8,8 +8,14 @@ namespace MyWebAppTest.Services
 {
     public class BlobStorageService : IBlobStorageService
     {
-        private const string _accountName = "stgaccaz204202201";
-        private const string _containerName = "samplecontainer";
+        private string _accountName;
+        private string _containerName;
+
+        public BlobStorageService(IConfiguration configuration)
+        {
+            _accountName = configuration["blobStorageAccountName"].ToString();
+            _containerName = configuration["blobContainerName"].ToString();
+        }
 
         public BlobContainerClient GetBlobContainerClient(string accountName, string containerName)
         {

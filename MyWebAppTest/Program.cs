@@ -10,16 +10,6 @@ using MyWebAppTest.Models;
 using MyWebAppTest.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-string appConfigEndpoint = builder.Configuration["appConfigEndpoint"];
-builder.Configuration.AddAzureAppConfiguration(options =>
-{
-    options.Connect(new Uri(appConfigEndpoint), new ManagedIdentityCredential())
-        .ConfigureKeyVault(kv =>
-        {
-            kv.SetCredential(new DefaultAzureCredential());
-        });
-});
-builder.Services.Configure<Settings>(builder.Configuration.GetSection("TestApp:Settings"));
 
 builder.Services.AddApplicationInsightsTelemetry();
 
@@ -30,6 +20,16 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             .AddMicrosoftGraph(builder.Configuration.GetSection("DownstreamApi"))
             .AddInMemoryTokenCaches();
 
+string appConfigEndpoint = builder.Configuration["appConfigEndpoint"];
+builder.Configuration.AddAzureAppConfiguration(options =>
+{
+    options.Connect(new Uri(appConfigEndpoint), new ManagedIdentityCredential())
+        .ConfigureKeyVault(kv =>
+        {
+            kv.SetCredential(new DefaultAzureCredential());
+        });
+});
+builder.Services.Configure<Settings>(builder.Configuration.GetSection("TestApp:Settings"));
 
 builder.Services.AddSingleton<ICosmosDbService>
     (CosmosDbRegistration.InitializeCosmosClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());

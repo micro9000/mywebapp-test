@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using MyWebAppTest.Models;
 using MyWebAppTest.Services;
 
@@ -13,18 +14,23 @@ namespace MyWebAppTest.Pages
         private readonly ICosmosDbService cosmosDbService;
         private readonly IQueueStorageService<Item> queueStorageService;
         private readonly IBlobStorageService blobStorageService;
+        private readonly Settings settings;
+
+        public Settings MySettings { get { return settings; } }
 
         public IEnumerable<Item> Items { get; set; } = new List<Item>();
 
         public IndexModel(ILogger<IndexModel> logger, 
                             ICosmosDbService cosmosDbService, 
                             IQueueStorageService<Item> queueStorageService,
-                            IBlobStorageService blobStorageService)
+                            IBlobStorageService blobStorageService,
+                            IOptionsSnapshot<Settings> options)
         {
             _logger = logger;
             this.cosmosDbService = cosmosDbService;
             this.queueStorageService = queueStorageService;
             this.blobStorageService = blobStorageService;
+            settings = options.Value;
         }
 
         public async Task OnGet()

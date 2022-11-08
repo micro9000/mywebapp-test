@@ -26,3 +26,7 @@
     <input type="file" asp-for="Upload" />
     <input type="submit" asp-page-handler="UploadFile"/>
 </form>
+
+<h1>Configs</h1>
+<p>@Model.MySettings.Secret</p>
+<p>@Model.MySettings.BackgroundColor</p>

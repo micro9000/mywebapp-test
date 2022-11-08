@@ -1,13 +1,26 @@
+using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Graph.ExternalConnectors;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using MyWebAppTest;
 using MyWebAppTest.Models;
 using MyWebAppTest.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+string appConfigEndpoint = builder.Configuration["appConfigEndpoint"];
+builder.Configuration.AddAzureAppConfiguration(options =>
+{
+    options.Connect(new Uri(appConfigEndpoint), new DefaultAzureCredential())
+        .ConfigureKeyVault(kv =>
+        {
+            kv.SetCredential(new DefaultAzureCredential());
+        });
+});
+builder.Services.Configure<Settings>(builder.Configuration.GetSection("TestApp:Settings"));
+
 builder.Services.AddApplicationInsightsTelemetry();
 
 var initialScopes = builder.Configuration.GetValue<string>("DownstreamApi:Scopes")?.Split(' ');

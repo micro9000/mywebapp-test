@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 string appConfigEndpoint = builder.Configuration["appConfigEndpoint"];
 builder.Configuration.AddAzureAppConfiguration(options =>
 {
-    options.Connect(new Uri(appConfigEndpoint), new DefaultAzureCredential())
+    options.Connect(new Uri(appConfigEndpoint), new ManagedIdentityCredential())
         .ConfigureKeyVault(kv =>
         {
             kv.SetCredential(new DefaultAzureCredential());

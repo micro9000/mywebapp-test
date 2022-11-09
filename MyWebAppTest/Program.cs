@@ -23,11 +23,7 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 string appConfigEndpoint = builder.Configuration["appConfigEndpoint"];
 builder.Configuration.AddAzureAppConfiguration(options =>
 {
-    options.Connect(new Uri(appConfigEndpoint), new DefaultAzureCredential())
-        .ConfigureKeyVault(kv =>
-        {
-            kv.SetCredential(new DefaultAzureCredential());
-        });
+    options.Connect(new Uri(appConfigEndpoint), new DefaultAzureCredential());
 });
 builder.Services.Configure<Settings>(builder.Configuration.GetSection("TestApp:Settings"));
 
